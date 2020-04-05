@@ -3,6 +3,7 @@
     ViewBag.Title = "Редактирование заметки";
 }
 <form asp-action="edit" asp-controller="note" asp-route-id="@Model.Id">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div class="form-group">
         <label asp-for="Title" class="control-label">Заголовок</label>
         <input type="text" asp-for="Title" class="form-control" />
@@ -10,8 +11,15 @@
     <div class="form-group">
         <label asp-for="Content" class="control-label">Текст заголовка</label>
         <input type="text" asp-for="Content" class="form-control" />
+        <span asp-validation-for="Content"></span>
     </div>
     <div class="form-group">
-        <input type="submit" value="Сохранить" class="btn btn-default"/>
+        <input type="submit" value="Сохранить" class="btn btn-default" />
     </div>
 </form>
+
+@section scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

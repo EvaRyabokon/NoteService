@@ -14,13 +14,6 @@ namespace NotesService.Controllers
             db = context;
         }
 
-        //[HttpGet, ActionName("List")]
-        //public async Task<IActionResult> List()
-        //{
-        //    return View(await db.Notes.ToListAsync());
-        //}
-
-        //[Route("search")]
         public async Task<IActionResult> List(string searchString)
         {
             if (!string.IsNullOrEmpty(searchString))
@@ -37,10 +30,10 @@ namespace NotesService.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(Note note)
         {
-
             db.Notes.Add(note);
             await db.SaveChangesAsync();
             return RedirectToAction("List");
@@ -102,4 +95,3 @@ namespace NotesService.Controllers
         }
     }
 }
-
