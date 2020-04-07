@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace NoreServiceTests
+namespace NotesServiceTests
 {
     public class NoteControllerTests
     {
@@ -42,7 +42,7 @@ namespace NoreServiceTests
         }
 
         [Fact]
-        public void CreatePostShouldReturnRedirectToActionListTest()
+        public void CreateShouldReturnRedirectToActionListTest()
         {
             var note = new Note { Id = 1, Title = "todo", Content = "do smth" };
             var mockRepo = new Mock<INoteRepository>();
@@ -56,7 +56,7 @@ namespace NoreServiceTests
         }
 
         [Fact]
-        public void CreatePostShouldBeCalledOnceTest()
+        public void CreateShouldBeCalledOnceTest()
         {
             var note = new Note { Id = 1, Title = "todo", Content = "do smth" };
             var mockRepo = new Mock<INoteRepository>();
@@ -68,7 +68,7 @@ namespace NoreServiceTests
         }
 
         [Fact]
-        public void CreateGetShouldHaveNoViewModelTest()
+        public void CreateShouldHaveNoViewModelTest()
         {
             var mockRepo = new Mock<INoteRepository>();
             var controller = new NoteController(mockRepo.Object);
@@ -80,7 +80,7 @@ namespace NoreServiceTests
         }
 
         [Fact]
-        public async Task DeletePostShouldReturnRedirectToActionList()
+        public async Task DeleteShouldReturnRedirectToActionList()
         {
             var mockRepo = new Mock<INoteRepository>();
             mockRepo.Setup(repo => repo.DeleteById(1)); 
@@ -104,7 +104,7 @@ namespace NoreServiceTests
         }
 
         [Fact]
-        public void EditPostShouldReturnRedirectToActionList()
+        public void EditShouldReturnRedirectToActionListTest()
         {
             var note = new Note { Id = 1, Title = "todo", Content = "do smth" };
             var mockRepo = new Mock<INoteRepository>();
@@ -118,7 +118,7 @@ namespace NoreServiceTests
         }
 
         [Fact]
-        public void EditPostShouldBeCalledOnceTest()
+        public void EditShouldBeCalledOnceTest()
         {
             var note = new Note { Id = 1, Title = "todo", Content = "do smth" };
             var mockRepo = new Mock<INoteRepository>();
@@ -130,9 +130,10 @@ namespace NoreServiceTests
         }
 
         [Fact]
-        public async Task UpdateGetWithInvalidIdShouldReturnNotFoundTest()
+        public async Task EditShouldReturnNotFoundIfUnexistentIdPassedTest()
         {
             var mockRepo = new Mock<INoteRepository>();
+            mockRepo.Setup(repo => repo.GetById(0)).ReturnsAsync((Note)null);
             var controller = new NoteController(mockRepo.Object);
 
             var result = await controller.Edit(0);
@@ -141,7 +142,7 @@ namespace NoreServiceTests
         }
 
         [Fact]
-        public async Task UpdateGetViewModelShouldBeOfTypeUpdateViewModelTest()
+        public async Task EditShouldReturnCorrectNoteTest()
         {
             var note = new Note { Id = 1, Title = "todo", Content = "do smth" };
             var mockRepo = new Mock<INoteRepository>();
@@ -152,23 +153,7 @@ namespace NoreServiceTests
 
             var viewResult = Assert.IsType<ViewResult>(result);
             var viewModel = Assert.IsAssignableFrom<Note>(viewResult.ViewData.Model);
-            Assert.Equal(note.Id, viewModel.Id);
-            Assert.Equal(note.Title, viewModel.Title);
-            Assert.Equal(note.Content, viewModel.Content);
-        }
-
-        [Fact]
-        public async Task Test()
-        {
-            var note = new Note { Id = 1, Title = "todo", Content = "" };
-
-            var mockRepo = new Mock<INoteRepository>();
-            var controller = new NoteController(mockRepo.Object);
-            controller.ModelState.AddModelError("Content", "Required");
-
-            var result = await controller.Edit(note);
-
-            Assert.IsType<BadRequestResult>(result);
+            Assert.Equal(note, viewModel);
         }
 
         private List<Note> GetTestNotes()

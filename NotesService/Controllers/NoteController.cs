@@ -53,16 +53,11 @@ namespace NotesService.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Note note)
         {
-            if (ModelState.IsValid)
-            {
-                await repository.Update(note);
-                return RedirectToAction("List");
-            }
-            else
-                return BadRequest();
+            await repository.Update(note);
+            return RedirectToAction("List");
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             await repository.DeleteById(id);

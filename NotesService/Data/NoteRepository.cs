@@ -8,6 +8,7 @@ namespace NotesService.Models
     public class NoteRepository : INoteRepository
     {
         private NoteContext db;
+
         public NoteRepository(NoteContext context)
         {
             db = context;
